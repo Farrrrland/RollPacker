@@ -4,7 +4,7 @@
 
 # RollPacker: Taming Long-Tail Rollouts for RL Post-Training with Tail Batching
 
-<h4>Artifact Evaluation Guidelines for NSDI'26 Paper #677</h4>
+Artifact Evaluation Guidelines for NSDI'26 [Paper #677](./files/nsdi26fall-paper677.pdf)
 
 </div>
 
