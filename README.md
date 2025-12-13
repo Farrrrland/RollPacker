@@ -57,7 +57,10 @@ bash examples/examples/sensitive_analysis_fig11/run_8k.sh
 This example will only invoke the rollout stage without actually train the model, since the sensitive analysis in Figure 11 only consider rollout time with different *P* and *R*
 
 - Micro-benchmarks of Reward Scheduler (Figure 13(b-c)).
-TBD
+
+```bash
+# scripts TBD
+```
 
 - Stream Trainer (Table 3).
 ```bash
