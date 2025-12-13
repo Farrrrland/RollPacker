@@ -52,7 +52,7 @@ By default, this pipeline runs for 40 iterations for illustration, you may run m
 
 - Sensitive Analysis (Figure 11).
 ```bash
-bash examples/examples/sensitive_analysis_fig11/run_8k.sh
+bash examples/sensitive_analysis_fig11/run_8k.sh
 ```
 This example will only invoke the rollout stage without actually train the model, since the sensitive analysis in Figure 11 only consider rollout time with different *P* and *R*
 

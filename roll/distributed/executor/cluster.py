@@ -107,7 +107,7 @@ class Cluster:
                 "LOCAL_RANK": str(0),
                 "CLUSTER_NAME": self.cluster_name,
                 "WORKER_NAME": worker_name,
-                "USE_MODELSCOPE":  os.environ.get("USE_MODELSCOPE", "0"), # NOTE: for disaggregate + nebula
+                "USE_MODELSCOPE":  os.environ.get("USE_MODELSCOPE", "0"), 
                 "TORCH_CUDA_ARCH_LIST": os.environ.get("TORCH_CUDA_ARCH_LIST", "9.0+PTX"),
                 # NOTE: check the following if needed
                 "VLLM_USE_V1": os.environ.get("VLLM_USE_V1", "1"),
