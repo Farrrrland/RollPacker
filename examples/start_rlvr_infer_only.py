@@ -33,25 +33,6 @@ def main():
 
     init()
     ppo_config.generate_opt_level = 2
-    pipeline_config = ppo_config
-    number_of_requests = pipeline_config.rollout_batch_size * pipeline_config.num_return_sequences_in_group
-    tp_size = pipeline_config.actor_train.strategy_args.strategy_config.get('tensor_model_parallel_size', 1)
-    pp_size = pipeline_config.actor_train.strategy_args.strategy_config.get('pipeline_model_parallel_size', 1)
-    cp_size = pipeline_config.actor_train.strategy_args.strategy_config.get('context_parallel_size', 1)
-    if pp_size == 1:
-        pipeline_config.actor_train.strategy_args.strategy_config.pop('virtual_pipeline_model_parallel_size', None)
-    if cp_size == 1: 
-        pipeline_config.actor_train.strategy_args.strategy_config.pop('sequence_parallel', None)
-
-
-    if pipeline_config.actor_train.training_args.gradient_accumulation_steps < 0: 
-        pipeline_config.actor_train.training_args.gradient_accumulation_steps = int(number_of_requests / (pipeline_config.actor_train.world_size // (tp_size * pp_size * cp_size) * \
-                            pipeline_config.actor_train.training_args.per_device_train_batch_size ))
-        
-    training_batch_size = pipeline_config.actor_train.world_size // (tp_size * pp_size * cp_size) * \
-                        pipeline_config.actor_train.training_args.per_device_train_batch_size * pipeline_config.actor_train.training_args.gradient_accumulation_steps
-
-    assert training_batch_size == number_of_requests, ("the number of samples in gen stage is {} v.s. the number of samples in training stage is {}".format(number_of_requests, training_batch_size))
 
     pipeline = RLVRPipelineAsync(pipeline_config=ppo_config)
     pipeline.debug_infer(total_iterations=args.total_iterations)

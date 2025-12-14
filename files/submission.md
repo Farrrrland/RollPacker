@@ -3,9 +3,9 @@
 
 ## Testbed Environment and Experiments Description
 We provide you with scripts and configurations to reproduce key results in our paper, including:
-- End-to-end evaluation results in Figure 8(a), Figure 9(a) and Figure 10(with a 7B model).
+- End-to-end evaluation results in Figure 8(a), Figure 9(a) and Figure 10(Qwen2.5-7B version).
 - Sensitive analysis in Figure 11.
-- Micro-benchmarks in Figure 13(b-c) and Table 3.
+- Micro-benchmarks in Figure 13(b with Qwen2.5-7B), Figure 13(c) and Table 3.
 
 *Note 1*: The evaluation results shown in the paper were conducted on NVIDIA H800 clusters with 16-128 GPUs. Providing such infrastructure is extremely expensive, so we only provide you with limited resources to train a **Qwen2.5-7B** model with 8K response length, which is the minimal model size exhibited in the paper. Micro-benchmarks in Figure 12, as well as the large-scale analysis in Figure 14, are not provided, since they require larger model sizes and more resources. Reviewers with access to large-scale resources may replicate these experiments.
 
@@ -48,8 +48,25 @@ This example will only invoke the rollout stage without actually train the model
 
 - Micro-benchmarks of Reward Scheduler (Figure 13(b-c)).
 
+
+Figure 13 (b) **without** pipeline execution:
 ```bash
-bash examples/benchmark_fig13/run_rw_sched.sh
+bash examples/benchmark_fig13/run_7B_nopipeline.sh 
+```
+
+Figure 13 (b) **with** pipeline execution:
+```bash
+bash examples/benchmark_fig13/run_7B_pipeline.sh
+```
+
+Figure 13 (c) **without** adaptive timeout:
+```bash
+bash examples/benchmark_fig13/run_7B_adpt_notimeout.sh
+```
+
+Figure 13 (c) **with** adaptive timeout:
+```bash
+bash examples/benchmark_fig13/run_7B_adpt_timeout.sh   
 ```
 
 - Stream Trainer (Table 3).
@@ -57,4 +74,3 @@ bash examples/benchmark_fig13/run_rw_sched.sh
 bash examples/stream_trainer_table3/run_stream_trainer.sh
 ```
 This example provides a fixed setting of `infer_scaling_down_progress_ratio=0.40` and `scaling_down_train_batch_size=64` **w/o tail batching**, you may compare the performance with the **Long Rounds** in end-to-end performance. The iteration repeats for 5 times by default.
-
