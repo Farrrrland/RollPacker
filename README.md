@@ -10,12 +10,12 @@ Artifact Evaluation Guidelines for NSDI'26 [Paper #677](./files/nsdi26fall-paper
 
 ## Testbed Environment and Experiments Description
 We provide you with scripts and configurations to reproduce key results in our paper, including:
-- End-to-end evaluation results in Figure 9(a) and Figure 10(Qwen2.5-7B version).
+- End-to-end evaluation results in Figure 9(a) and Figure 10 (Qwen2.5-7B version with 4K response length).
 - Sensitive analysis in Figure 11.
 - Micro-benchmarks in Figure 13(b with Qwen2.5-7B), Figure 13(c) and Table 3.
 
 *Note 1*: The evaluation results shown in the paper were conducted on NVIDIA H800 clusters with 16-128 GPUs.
-Providing such infrastructure is extremely expensive, so we only provide you with resources of *four A800 GPUs* to train a **Qwen2.5-7B** model with 8K response length, which is the minimal model size exhibited in the paper.
+Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight A800/A100 GPUs* to train a **Qwen2.5-7B** model with 8K response length, which is the minimal model size exhibited in the paper.
 Micro-benchmarks in Figure 12, as well as the large-scale analysis in Figure 14, are not provided, since they require larger model sizes and more resources.
 Reviewers with access to large-scale resources may replicate these experiments.
 
@@ -50,18 +50,51 @@ You will find the source code located in `/root/code/RollPacker` of the Docker i
     bash install.sh
     ```
 
-### Run Experiments
-- End-to-end Evaluation (Figure 8(a), 9(a), 10).
-```bash
-bash examples/e2e_performance/run_pipe.sh
+## Recommanded Configurations
+To visualize full metrics, we recommand you to use your [Weights&Biases](https://wandb.ai/) account (which is free to register) and add your configurations in each `yaml` as following:
+
+```yaml
+track_with: wandb
+tracker_kwargs:
+  api_key: your-wandb-api-key
+  project: your-project-name
+  name: qwen2.5-7B-4k-e2e-performance
+  notes: end-to-end RollPacker
+  tags:
+    - RollPacker
+    - Math
 ```
-By default, this pipeline runs for 25 iterations for illustration, you may run more steps to reproduce the reported validation score in Figure 8(a) if you have available resources in your own domain.
+You can also use tensorboard if you prefer to do so.
+
+## Run Experiments
+- End-to-end Evaluation (Figure 8(a)-optional, 9(a), 10).
+    ```bash
+    bash examples/e2e_performance/run_pipe.sh
+    ```
+    By default, this pipeline runs for **25 iterations** for illustration and use math data for training, you may run more steps to reproduce the reported validation score in Figure 8(a) if you have available resources in your own domain.
+
+    If you collect metrics with W&B or tensorboard, you may search for the following metrics to reproduce the evaluations in our paper.
+    
+    - Figure 9(a) corresponds with `time/step_total`.
+        ![](./files/step_total.png)
+    - Figure 10(a) corresponds with `token/response_length/max`.
+        ![](./files/max_length.png)
+    - Figure 10(b) corresponds with `time/step_generate`.
+        ![](./files/step_gen.png)
 
 - Sensitive Analysis (Figure 11).
     ```bash
     bash examples/sensitive_analysis_fig11/run_8k.sh
     ```
     This example will only invoke the rollout stage without actually train the model, since the sensitive analysis in Figure 11 only consider rollout time with different *P* and *R*
+
+    After finish execution, you may run the following:
+    ```bash
+    cd ./plot
+    python plt_sensitive_squeezer.py
+    ```
+    You may find the visualized result as illustrated in figure 11 in `./plot/img/prompt_suqeezer_diff_config.png`.
+    ![](./plot/img/prompt_suqeezer_diff_config.png)
 
 - Micro-benchmarks of Reward Scheduler (Figure 13(b-c)).
 
@@ -90,7 +123,13 @@ By default, this pipeline runs for 25 iterations for illustration, you may run m
     bash examples/stream_trainer_table3/run_stream_trainer.sh
     ```
     This example provides a fixed setting of `infer_scaling_down_progress_ratio=0.40` and `scaling_down_train_batch_size=64` **w/o tail batching**, you may compare the performance with the **Long Rounds** in end-to-end performance.
-    The iteration repeats for 5 times by default.
+    The iteration repeats for **5 times** by default.
+
+    You may compare the step time with previous end-to-end metrics without enabling the stream traine.
+    Since tail batching is not enabled in this run, you should compare the average step time with the **Long Rounds** (e.g., global_step=4) in the end-to-end metric.
+    ![](./files/stream_compare.png)
+    Note that you can skip the overhead of the first step since it incurres plently initialization overhead with will be armortized with over 100 steps of the total training pipeline.
+
 
 ### Visualize the Results
 

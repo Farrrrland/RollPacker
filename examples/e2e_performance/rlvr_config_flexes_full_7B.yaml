@@ -2,7 +2,7 @@ hydra:
   run:
     dir: .
   output_subdir: null
-exp_name: flexes_full_qwen2_5_7B_8k_8GPU
+exp_name: rollpacker_qwen2_5_7B_4k_8GPU
 seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
@@ -22,9 +22,9 @@ checkpoint_config:
 
 track_with: wandb
 tracker_kwargs:
-  api_key: 4e36648bdd82afa73107451b7ccfbfbc5e6a160f
-  project: flexes_e2e_performance_ae
-  name: qwen2.5-7B-8k-e2e-performance
+  api_key: your-wandb-api-key
+  project: your-project-name
+  name: qwen2.5-7B-4k-e2e-performance
   notes: end-to-end RollPacker
   tags:
     - RollPacker
@@ -42,10 +42,10 @@ logging_steps: 1
 eval_steps: 1000
 resume_from_checkpoint: false
 global_template: longCOT_qwen2.5
-rollout_batch_size: 128
+rollout_batch_size: 64
 prompt_length: 2048
 response_length: 4096
-num_return_sequences_in_group: 8
+num_return_sequences_in_group: 4
 ppo_epochs: 1
 adv_estimator: reinforce
 value_clip: 0.5
@@ -66,7 +66,7 @@ add_token_level_kl: false
 whiten_advantages: true
 max_running_requests: 2048
 dynamic_sampling: false
-max_num_return_sequences: 10
+max_num_return_sequences: 5
 max_prompts: 2048
 max_prompts_ratio: 1.25
 is_num_return_sequences_expand: true
@@ -83,19 +83,15 @@ actor_train:
     learning_rate: 5.0e-07
     weight_decay: 0
     per_device_train_batch_size: 1
-    gradient_accumulation_steps: 128
-    warmup_steps: 20
+    gradient_accumulation_steps: 256
+    warmup_steps: 1
     num_train_epochs: 50
   data_args:
     template: ${global_template}
     file_name:
       - data/math_deepmath_deal_e2e.jsonl
-      - data/llm_judge_math_rlvr_e2e.jsonl
-      - data/code_KodCode_data_with_time_e2e.jsonl
     domain_interleave_probs:
-      math_rule: 0.34375
-      llm_judge: 0.34375
-      code_sandbox: 0.3125
+      math_rule: 1.0
     dataset_dir: data
     messages: messages
     interleave_probs: '1.0'
@@ -104,7 +100,7 @@ actor_train:
     strategy_name: megatron_train
     strategy_config:
       tensor_model_parallel_size: 2
-      pipeline_model_parallel_size: 1
+      pipeline_model_parallel_size: 2
       expert_model_parallel_size: 1
       context_parallel_size: 1
       overlap_grad_reduce: false
@@ -112,6 +108,7 @@ actor_train:
       sequence_parallel: true
       moe_token_dispatcher_type: alltoall
       variable_seq_lengths: true
+      recompute_granularity: full
   device_mapping: list(range(0, 8))
   infer_batch_size: 1
   use_remove_padding: true
@@ -133,11 +130,11 @@ actor_infer:
     strategy_name: vllm
     strategy_config:
       disable_log_stats: false
-      gpu_memory_utilization: 0.85
+      gpu_memory_utilization: 0.6
       block_size: 16
-      max_model_len: 32768
+      max_model_len: 8192
       enforce_eager: false
-      tensor_parallel_size: 2
+      tensor_parallel_size: 1
       max_num_seqs: 2048
   device_mapping: list(range(0, 8))
   infer_batch_size: 1
@@ -168,40 +165,4 @@ rewards:
       - deepmath_103k
       - aime
     world_size: 32
-    infer_batch_size: 1
-  code_sandbox:
-    use_local: true
-    worker_cls: roll.pipeline.rlvr.rewards.code_sandbox_reward_worker.CodeSandboxRewardWorker
-    tag_included: [KodCode]
-    model_args:
-      model_name_or_path: ${reward_pretrain}
-    data_args:
-      template: ${global_template}
-    world_size: 32
-    infer_batch_size: 1
-  llm_judge:
-    worker_cls: roll.pipeline.rlvr.rewards.llm_judge_reward_worker.LLMJudgeRewardWorker
-    judge_prompt: Qwen2.5-7B-Instruct-RLVR-prompt
-    judge_model_type: inference
-    tag_included:
-      - RLVR
-    model_args:
-      model_name_or_path: virtuoussy/Qwen2.5-7B-Instruct-RLVR
-      attn_implementation: fa2
-      disable_gradient_checkpointing: true
-      dtype: bf16
-      model_type: trl
-    generating_args:
-      max_new_tokens: 1
-      top_p: 0.8
-      top_k: 50
-      num_beams: 1
-      temperature: 0.8
-      num_return_sequences: 1
-    data_args:
-      template: ${global_template}
-    strategy_args:
-      strategy_name: hf_infer
-      strategy_config: null
-    device_mapping: list(range(0, 8))
     infer_batch_size: 1
