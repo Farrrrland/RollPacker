@@ -29,7 +29,7 @@ Although we do not provide resources for these experiments, reviewers with acces
 
 ## Environment Setup
 
-### Option #1: Use Public Docker image.
+### Option #1: Use Docker Image.
 ```bash
 mkdir -p ./infra/
 cd ./infra
@@ -54,11 +54,6 @@ bash install.sh
 ### Option #2: Build your own environment based on ROLL.
 `RollPacker` is build on [ROLL](https://github.com/alibaba/ROLL). So you can follow ROLL's [set up instructions](https://github.com/alibaba/ROLL?tab=readme-ov-file#-get-started) to build your own environment for the **RLVR Pipeline**.
 
-## Get Start
-- Install necessary python packages and wait for several minutes to complete.
-    ```bash
-    bash install.sh
-    ```
 
 ## Recommanded Configurations
 To visualize full metrics, we recommand you to use your [Weights&Biases](https://wandb.ai/) account (which is free to register) and add your configurations in each `yaml` as following:
