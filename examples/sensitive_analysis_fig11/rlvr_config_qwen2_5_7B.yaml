@@ -7,7 +7,7 @@ seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
 report_length_and_rewards: true
-profiler_output_dir: /data/oss_bucket_0/zixing/length_profiler
+profiler_output_dir: ./output/profiler
 system_envs:
   USE_MODELSCOPE: '0'
   LAYER_BY_LAYER: '0'
@@ -22,7 +22,7 @@ logging_steps: 1
 eval_steps: 10
 resume_from_checkpoint: false
 global_template: longCOT_qwen2.5
-rollout_batch_size: 128
+rollout_batch_size: 32
 prompt_length: 2048
 response_length: 8192
 num_return_sequences_in_group: 8
@@ -46,9 +46,9 @@ add_token_level_kl: false
 whiten_advantages: true
 max_running_requests: 2048
 dynamic_sampling: false
-max_num_return_sequences: 8
+max_num_return_sequences: 10
 max_prompts: 2048
-max_prompts_ratio: 1
+max_prompts_ratio: 1.25
 is_num_return_sequences_expand: true
 pretrain: Qwen/Qwen2.5-7B
 reward_pretrain: Qwen/Qwen2.5-7B
@@ -62,7 +62,7 @@ actor_train:
     learning_rate: 1.0e-06
     weight_decay: 0
     per_device_train_batch_size: 1
-    gradient_accumulation_steps: 32
+    gradient_accumulation_steps: 16
     warmup_steps: 20
     num_train_epochs: 50
   data_args:
@@ -87,7 +87,7 @@ actor_train:
       sequence_parallel: true
       moe_token_dispatcher_type: alltoall
       variable_seq_lengths: true
-  device_mapping: list(range(0,16))
+  device_mapping: list(range(0,8))
   infer_batch_size: 1
   use_remove_padding: false
 actor_infer:
@@ -114,7 +114,7 @@ actor_infer:
       enforce_eager: false
       tensor_parallel_size: 1
       max_num_seqs: 2048
-  device_mapping: list(range(0,16))
+  device_mapping: list(range(0,8))
   infer_batch_size: 1
 reference:
   model_args:
@@ -130,7 +130,7 @@ reference:
       tensor_model_parallel_size: 1
       pipeline_model_parallel_size: 1
       expert_model_parallel_size: 1
-  device_mapping: list(range(0,16))
+  device_mapping: list(range(0,8))
   infer_batch_size: 8
 rewards:
   math_rule:

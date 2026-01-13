@@ -2,12 +2,12 @@ hydra:
   run:
     dir: .
   output_subdir: null
-exp_name: flexes_full_qwen2_5_7B_8k_16GPU
+exp_name: flexes_full_qwen2_5_7B_8k_8GPU
 seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
 report_length_and_rewards: true
-profiler_output_dir: ./output
+profiler_output_dir: ./output/profiler
 
 system_envs:
   SKIP_OLD_LOG_PROBS: 'True'
@@ -22,8 +22,8 @@ checkpoint_config:
 
 track_with: wandb
 tracker_kwargs:
-  api_key: your-wandb-api-key
-  project: your-project-name
+  api_key: 4e36648bdd82afa73107451b7ccfbfbc5e6a160f
+  project: flexes_e2e_performance_ae
   name: qwen2.5-7B-8k-e2e-performance
   notes: end-to-end RollPacker
   tags:
@@ -33,18 +33,18 @@ tracker_kwargs:
 
 num_gpus_per_node: 8
 multi_infer_tp: false
-autoscaling: true
-infer_scaling_down_progress_ratio: 0.25
-scaling_down_train_batch_size: 32
-max_steps: 80
+autoscaling: false
+infer_scaling_down_progress_ratio: -1
+scaling_down_train_batch_size: -1
+max_steps: 25
 save_steps: 100
 logging_steps: 1
-eval_steps: 1
+eval_steps: 1000
 resume_from_checkpoint: false
 global_template: longCOT_qwen2.5
 rollout_batch_size: 128
 prompt_length: 2048
-response_length: 8192
+response_length: 4096
 num_return_sequences_in_group: 8
 ppo_epochs: 1
 adv_estimator: reinforce
@@ -72,20 +72,6 @@ max_prompts_ratio: 1.25
 is_num_return_sequences_expand: true
 pretrain: Qwen/Qwen2.5-7B
 reward_pretrain: Qwen/Qwen2.5-7B
-
-validation:
-  data_args:
-    template: ${global_template}
-    file_name:
-      - /data/oss_bucket_1/rl_examples/data/livecodebench_v5_deal.jsonl
-      - data/math_benchmarks.jsonl
-  generating_args:
-    max_new_tokens: ${response_length}
-    top_p: 0.6
-    top_k: 50
-    num_beams: 1
-    temperature: 0.6
-    num_return_sequences: 1
 
 actor_train:
   model_args:

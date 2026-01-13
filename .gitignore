@@ -216,3 +216,5 @@ plot/motivation
 data/code_rl_data_v2.4_top2048_shortest_correct_test_cases.jsonl
 data/code_rl_data_v2.4_top2048_shortest_correct_test_cases_with_reference_time.jsonl
 data/code_rl_data_v2.4_top2048_shortest_correct_test_cases_e2e.jsonl
+
+examples/revision_eval/

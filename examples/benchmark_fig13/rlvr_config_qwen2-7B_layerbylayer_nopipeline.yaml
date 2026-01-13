@@ -7,7 +7,7 @@ seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
 report_length_and_rewards: false
-profiler_output_dir: ./output
+profiler_output_dir: ./output/profiler
 system_envs:
   USE_MODELSCOPE: '0'
   LAYER_BY_LAYER: '1'

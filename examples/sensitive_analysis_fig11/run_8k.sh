@@ -1,6 +1,5 @@
 set +x
 
-# Run TP comparison experiments
 export WANDB_MODE=online
 export RAY_DEDUP_LOGS=0 
 
@@ -9,8 +8,8 @@ export TORCH_CUDA_ARCH_LIST="9.0+PTX"
 # install yq
 pip install yq
 
-sudo yum install -y epel-release
-sudo yum install -y jq
+# apt install -y epel-release
+# apt install -y jq
 
 CONFIG_PATH=$(basename $(dirname $0))
 CONFIG_FILE="./examples/$CONFIG_PATH/rlvr_config_qwen2_5_7B.yaml"
@@ -30,6 +29,8 @@ EXPERIMENTS=(
     [7]="1.5 8"
     [8]="1.25 10"
 )
+
+rm -rf ./output/profiler/prompt_squeezer_ultra_context8k
 
 for idx in "${!EXPERIMENTS[@]}"; do
     IFS=' ' read -r ratio resp <<< "${EXPERIMENTS[$idx]}"
