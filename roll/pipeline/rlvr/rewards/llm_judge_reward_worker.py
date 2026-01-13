@@ -261,12 +261,12 @@ class LLMJudgeRewardWorker(Worker):
                 "token_level_rewards": token_level_rewards,
                 "response_level_rewards": response_level_rewards,
                 "scores": scores_tensor,
-                # "start_compute_reward_list": torch.tensor(start_compute_reward_list, dtype=torch.float64),
+                "start_compute_reward_list": torch.tensor(start_time_inference_list, dtype=torch.float64),
                 # "start_time_inference_list": torch.tensor(start_time_inference_list, dtype=torch.float64),
                 # "end_time_inference_list": torch.tensor(end_time_inference_list, dtype=torch.float64),
-                # "reward_score_list": torch.tensor(reward_score_list, dtype=torch.float16),
-                # "end_compute_reward_list": torch.tensor(end_compute_reward_list, dtype=torch.float64),
-                # "test_cases_list": torch.tensor(test_cases_list, dtype=torch.int32)
+                "reward_score_list": torch.tensor(reward_score_list, dtype=torch.float16),
+                "end_compute_reward_list": torch.tensor(end_time_inference_list, dtype=torch.float64),
+                "test_cases_list": torch.tensor(test_cases_list, dtype=torch.int32)
             }
         )
 

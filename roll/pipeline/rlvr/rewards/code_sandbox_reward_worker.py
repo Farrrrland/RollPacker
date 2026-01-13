@@ -909,13 +909,13 @@ class CodeSandboxRewardWorker(Worker):
                 "token_level_rewards": token_level_rewards,
                 "response_level_rewards": response_level_rewards,
                 "scores": scores,
-                # "start_compute_reward_list": torch.tensor(start_compute_reward_list, dtype=torch.float64),
-                # "end_compute_reward_list": torch.tensor(end_compute_reward_list, dtype=torch.float64),
-                # "reward_score_list": torch.tensor(reward_score_list, dtype=torch.float16),
-                # "test_cases_list": torch.tensor(test_cases_list, dtype=torch.int32),
+                "start_compute_reward_list": torch.tensor(start_compute_reward_list, dtype=torch.float64),
+                "end_compute_reward_list": torch.tensor(end_compute_reward_list, dtype=torch.float64),
+                "reward_score_list": torch.tensor(reward_score_list, dtype=torch.float16),
+                "test_cases_list": torch.tensor(test_cases_list, dtype=torch.int32),
             }
         )
-
+        output.meta_info = {"worker_name": self.worker_name}
         self.logger.info(f"[TIMER][compute_rewards_codesandbox_end][request_id={request_id}][origin_prompt_id={origin_prompt_id}][time={time.time()}][scores={scores}][error_infos={error_infos}]")
         return output
 

@@ -1,9 +1,3 @@
-
-defaults:
-  - ../../config/deepspeed_zero@_here_
-  - ../../config/deepspeed_zero2@_here_
-  - ../../config/deepspeed_zero3@_here_
-  - ../../config/deepspeed_zero3_cpuoffload@_here_
 hydra:
   run:
     dir: .
@@ -23,16 +17,16 @@ system_envs:
   USE_TIMER: '1'
 checkpoint_config:
   type: file_system
-  output_dir: /root/code/${exp_name}
+  output_dir: ./${exp_name}
 
-track_with: wandb
-tracker_kwargs:
-  api_key: your-wandb-api-key
-  project: your-project-name
-  name: code_time_test_multiasync_adaptive_KodCode
-  notes: code_time_test_multiasync_adaptive_KodCode
-  tags:
-    - RollPacker
+# track_with: wandb
+# tracker_kwargs:
+#   api_key: your-wandb-api-key
+#   project: your-project-name
+#   name: code_time_test_multiasync_adaptive_KodCode
+#   notes: code_time_test_multiasync_adaptive_KodCode
+#   tags:
+#     - RollPacker
 
 num_gpus_per_node: 8
 num_rollout_max: 8
@@ -77,6 +71,8 @@ pretrain: Qwen/Qwen2.5-7B
 reward_pretrain: Qwen/Qwen2.5-7B
 generate_opt_level: 2
 autoscaling: false
+infer_scaling_down_progress_ratio: -1
+scaling_down_train_batch_size: -1
 
 
 actor_train:

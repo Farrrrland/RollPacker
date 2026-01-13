@@ -28,8 +28,8 @@ do
             rollout_batch_size=${ROLLOUT_BATCH_SIZE} \
             actor_train.training_args.gradient_accumulation_steps=${GRAD_ACC_STEPS} \
             rewards.llm_judge.generating_args.max_new_tokens=${MAX_NEW_TOKENS} \
-            > ${timestamp}_rollout${ROLLOUT_BATCH_SIZE}_nopipeline_maxnew${MAX_NEW_TOKENS}.log 2>&1
-        echo "save log to ${timestamp}_rollout${ROLLOUT_BATCH_SIZE}_nopipeline_maxnew${MAX_NEW_TOKENS}.log"
+            # > ${timestamp}_rollout${ROLLOUT_BATCH_SIZE}_nopipeline_maxnew${MAX_NEW_TOKENS}.log 2>&1
+        # echo "save log to ${timestamp}_rollout${ROLLOUT_BATCH_SIZE}_nopipeline_maxnew${MAX_NEW_TOKENS}.log"
         ray stop --force
     done
 done

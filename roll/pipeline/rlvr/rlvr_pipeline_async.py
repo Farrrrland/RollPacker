@@ -743,6 +743,7 @@ class RLVRPipelineAsync(BasePipeline):
         global_step = 0
 
         while global_step <= self.pipeline_config.max_steps:
+            start_time = time.time()
             model_update_instance = int(use_large_tp)
             if global_step <= self.state.step:
                 global_step += 1
@@ -1231,6 +1232,55 @@ class RLVRPipelineAsync(BasePipeline):
             self.do_checkpoint(global_step=global_step)
             
             self.tracker.log(values=metrics, step=global_step)
+
+            print(f"[TIMER][Pipeline-end][iteration={global_step}][time={time.time()}]")
+
+            end_time = time.time()
+
+            if os.environ.get("USE_TIMER", '0') == '1':
+                # 只收集generate_schedulers的timer，不再收集reward_worker的timer
+                timers = {}
+
+                for domain, scheduler in self.generate_schedulers.items():
+                    timer_obj = ray.get(scheduler.get_timer.remote())
+                    timers[f"generate_scheduler_{domain}"] = timer_obj
+
+                # Merge all timer dicts by request_id
+                merged_timers = {}
+                for timer_name, timer_obj in timers.items():
+                    timings = getattr(timer_obj, "_timings", None)
+                    if timings is None:
+                        timings = timer_obj.get("_timings", {}) if isinstance(timer_obj, dict) else {}
+                    for request_id, timing_dict in timings.items():
+                        if request_id not in merged_timers:
+                            merged_timers[request_id] = {}
+                        for k, v in timing_dict.items():
+                            # If key already exists, append with timer_name as prefix to avoid collision
+                            if k in merged_timers[request_id]:
+                                if k != "prompt_id":
+                                    merged_timers[request_id][f"{timer_name}.{k}"] = v
+                            else:
+                                merged_timers[request_id][k] = v
+
+                get_batch_dir = os.path.join(self.pipeline_config.profiler_output_dir, "request_time")
+                os.makedirs(get_batch_dir, exist_ok=True)
+                filename = f"time_iter{global_step}.jsonl"
+                filepath = os.path.join(get_batch_dir, filename)
+                with open(filepath, "a", encoding="utf-8") as f:
+                    for request_id, timing_dict in merged_timers.items():
+                        record = {"request_id": request_id, "timings": timing_dict}
+                        print(f"request_id: {request_id}, timings: {timing_dict}")
+                        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+                # remote调用
+                ray.get([scheduler.clear_timer.remote() for scheduler in self.generate_schedulers.values()])
+
+                iter_time_dir = os.path.join(self.pipeline_config.profiler_output_dir, "iter_time")
+                os.makedirs(iter_time_dir, exist_ok=True)
+                filename = f"time_iter{global_step}_sum.jsonl"
+                filepath = os.path.join(iter_time_dir, filename)
+                with open(filepath, "a", encoding="utf-8") as f:
+                    f.write(json.dumps({"start_time": start_time, "end_time": end_time, "duration": end_time - start_time}, ensure_ascii=False) + "\n")
 
             global_step += 1
 
