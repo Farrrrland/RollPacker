@@ -13,10 +13,27 @@ plt.rcParams['hatch.linewidth'] = edge_width
 colors = ['Blues', 'Reds']
 line_styles = ['-', '--']
 
-# adaptive timeout, 7B, 8K, batch_size=44, change dataset to code_KodCode_data_with_time_e2e_filtered.jsonl
-adaptive_log_dir = os.path.expanduser("~/logs/code_time_test/20250911-211641-0-0.75-44-1/iter_time/")
-# no adaptive timeout, 7B, 8K, batch_size=44, change dataset to code_KodCode_data_with_time_e2e_filtered.jsonl
-no_adaptive_log_dir = os.path.expanduser("~/logs/code_time_test/20250911-213741-0-0.75-44-0/iter_time/")
+def get_latest_iter_time_dir(pattern):
+    # pattern is the base pattern like "output/profiler/code_time_test_multiasync_adaptive_KodCode"
+    base_dir = pattern
+    if not os.path.exists(base_dir):
+        raise RuntimeError(f"Base directory {base_dir} does not exist")
+    subdirs = [os.path.join(base_dir, d) for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
+    if not subdirs:
+        raise RuntimeError(f"No subdirectories in {base_dir}")
+    # sort by timestamp in folder name
+    subdirs_sorted = sorted(subdirs, key=lambda x: x.split('/')[-1], reverse=True)
+    latest_dir = subdirs_sorted[0]
+    iter_time_dir = os.path.join(latest_dir, "iter_time")
+    if not os.path.exists(iter_time_dir):
+        raise RuntimeError(f"iter_time directory not found in {latest_dir}")
+    return iter_time_dir
+adaptive_base_dir = "output/profiler/code_time_test_multiasync_adaptive_KodCode"
+no_adaptive_base_dir = "output/profiler/code_time_test_multiasync_adaptive_KodCode"
+adaptive_log_dir = get_latest_iter_time_dir(adaptive_base_dir)
+no_adaptive_log_dir = get_latest_iter_time_dir(no_adaptive_base_dir)
+print(f"adaptive_log_dir: {adaptive_log_dir}")
+print(f"no_adaptive_log_dir: {no_adaptive_log_dir}")
 
 def extract_iters_and_durations(log_dir):
     jsonl_files = glob.glob(os.path.join(log_dir, "time_iter*_sum.jsonl"))
@@ -148,6 +165,6 @@ ax.legend(
 )
 
 plt.tight_layout()
-plt.savefig(f"./2_code_timeout/code_adaptive_time_limit.pdf", bbox_inches='tight')
-print("Saved figure to ./2_code_timeout/code_adaptive_time_limit.pdf")
+plt.savefig(f"plot/img/code_adaptive_time_limit.png", bbox_inches='tight')
+print("Saved figure to plot/img/code_adaptive_time_limit.png")
 plt.close()

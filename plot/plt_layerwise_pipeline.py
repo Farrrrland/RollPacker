@@ -131,6 +131,6 @@ ax.legend(
 )
 
 plt.tight_layout()
-plt.savefig(f"plot/img/layerwise_pipeline_7B.pdf", bbox_inches='tight')
-print("Saved figure to plot/img/layerwise_pipeline_7B.pdf")
+plt.savefig(f"plot/img/layerwise_pipeline_7B.png", bbox_inches='tight')
+print("Saved figure to plot/img/layerwise_pipeline_7B.png")
 plt.close()

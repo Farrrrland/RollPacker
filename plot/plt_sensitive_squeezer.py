@@ -182,4 +182,4 @@ fig.legend(
 )
 
 plt.tight_layout(rect=[0, 0, 1, 0.95])
-plt.savefig(f"./img/prompt_suqeezer_diff_config.pdf")
+plt.savefig(f"./img/prompt_suqeezer_diff_config.png")

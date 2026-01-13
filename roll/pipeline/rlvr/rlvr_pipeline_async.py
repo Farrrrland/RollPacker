@@ -965,6 +965,13 @@ class RLVRPipelineAsync(BasePipeline):
                             # gen_metrics = self.actor_infer.stop_server()
                             gen_metrics = running_infer_server.stop_server()
                             metrics_mgr.add_domain_metrics(domain, reduce_metrics(gen_metrics.meta_info.pop("metrics", {})))
+                        if not self.pipeline_config.multi_infer_tp:
+                            running_infer_server = self.actor_infer
+                            next_running_server = self.actor_infer
+                            running_infer_server.stop_server()
+                            next_running_server.stop_server()
+
+
 
                     metrics_mgr.add_metric("time/step_generate", step_generate_timer.last)
                     if int(os.environ.get("REPORT_LENGTH_AND_REWARDS", "0")):
@@ -982,7 +989,7 @@ class RLVRPipelineAsync(BasePipeline):
                             f.write(json.dumps(get_batch_time) + "\n")
                     batch = generate_output
 
-
+                parse_gpu_info()
                 batch = generate_output
                 if self.pipeline_config.autoscaling: 
                     response_mask = batch.batch["response_mask"][:, 1:].bool()
