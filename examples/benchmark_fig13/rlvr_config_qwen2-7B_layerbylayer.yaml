@@ -18,20 +18,20 @@ system_envs:
   TORCH_CUDA_ARCH_LIST: '9.0+PTX'
 checkpoint_config:
   type: file_system
-  output_dir: /root/code/${exp_name}
+  output_dir: ./${exp_name}
 multi_infer_tp: false
 autoscaling: false
 infer_scaling_down_progress_ratio: -1
 scaling_down_train_batch_size: -1
 
-track_with: wandb
-tracker_kwargs:
-  api_key: your-wandb-api-key
-  project: your-project-name
-  name: llmjudge_qwen2-7B_layerbylayer
-  notes: llmjudge_qwen2-7B_layerbylayer
-  tags:
-    - RollPacker
+# track_with: wandb
+# tracker_kwargs:
+#   api_key: your-wandb-api-key
+#   project: your-project-name
+#   name: llmjudge_qwen2-7B_layerbylayer
+#   notes: llmjudge_qwen2-7B_layerbylayer
+#   tags:
+#     - RollPacker
 
 num_gpus_per_node: 8
 num_rollout_max: 8

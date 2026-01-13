@@ -19,7 +19,7 @@ from transformers.integrations import is_deepspeed_zero3_enabled
 from transformers.modeling_utils import is_fsdp_enabled
 from transformers.models.auto.image_processing_auto import model_type
 
-from roll.models.trl_patches import layerwise_forward_qwen2, LayerWise, layerwise_forward_qwen3
+from roll.models.trl_patches import layerwise_forward_qwen2, layerwise_forward_qwen2_nopipeline, LayerWise, layerwise_forward_qwen3
 
 import types
 
@@ -494,7 +494,10 @@ def default_reward_model_provider(
                 qwen_model.optimized_layers = [LayerWise(layer) for layer in qwen_model.layers]
                 
                 if "qwen2" == qwen_model.config.model_type:
-                    qwen_model.forward = types.MethodType(layerwise_forward_qwen2, qwen_model)
+                    if os.environ.get("LLMJUDGE_NO_PIPELINE", "0") == "1":
+                        qwen_model.forward = types.MethodType(layerwise_forward_qwen2_nopipeline, qwen_model)
+                    else:
+                        qwen_model.forward = types.MethodType(layerwise_forward_qwen2, qwen_model)
                 elif "qwen3" == qwen_model.config.model_type:
                     qwen_model.forward = types.MethodType(layerwise_forward_qwen3, qwen_model)
                 else:

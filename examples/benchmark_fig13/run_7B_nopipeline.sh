@@ -4,7 +4,7 @@ set +x
 export RAY_DEDUP_LOGS=0 
 
 ray stop --force
-CONFIG_PATH=dakai/$(basename $(dirname $0))
+CONFIG_PATH=$(basename $(dirname $0))
 
 echo $CONFIG_PATH
 
