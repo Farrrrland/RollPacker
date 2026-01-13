@@ -15,7 +15,7 @@ We provide you with scripts and configurations to reproduce key results in our p
 - Micro-benchmarks in Figure 13(b with Qwen2.5-7B), Figure 13(c) and Table 3.
 
 *Note 1*: The evaluation results shown in the paper were conducted on NVIDIA H800 clusters with 16-128 GPUs.
-Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight H800 GPUs* to train a **Qwen2.5-7B** model with 8K response length, which is the minimal model size exhibited in the paper.
+Providing such infrastructure is extremely expensive, so we only provide you with resources of *four A800 GPUs* to train a **Qwen2.5-7B** model with 8K response length, which is the minimal model size exhibited in the paper.
 Micro-benchmarks in Figure 12, as well as the large-scale analysis in Figure 14, are not provided, since they require larger model sizes and more resources.
 Reviewers with access to large-scale resources may replicate these experiments.
 
@@ -48,7 +48,7 @@ bash install.sh
 ```bash
 bash examples/e2e_performance/run_pipe.sh
 ```
-By default, this pipeline runs for 40 iterations for illustration, you may run more steps to reproduce the reported calidation score in Figure 8(a).
+By default, this pipeline runs for 40 iterations for illustration, you may run more steps to reproduce the reported validation score in Figure 8(a).
 
 - Sensitive Analysis (Figure 11).
 ```bash
