@@ -39,7 +39,7 @@ cd ..
 docker pull hiyouga/verl:ngc-th2.6.0-cu126-vllm0.8.4-flashinfer0.2.2-cxx11abi0
 docker run --rm -it \
   --gpus all \
-  -v ~/infra:/root/code \
+  -v ./infra:/root/code \
   --workdir /root/code \
   hiyouga/verl:ngc-th2.6.0-cu126-vllm0.8.4-flashinfer0.2.2-cxx11abi0 \
   /bin/bash
