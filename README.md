@@ -104,14 +104,14 @@ You can also use tensorboard if you prefer to do so.
     You may find the visualized result as illustrated in figure 11 in `./plot/img/prompt_suqeezer_diff_config.png`.
     ![](./plot/img/prompt_suqeezer_diff_config.png)
 
-- Micro-benchmarks of Reward Scheduler (Figure 13(b-c)).
+- Micro-benchmarks of Reward Scheduler (Figure 14(b-c)).
 
-    Figure 13 (b) **without** pipeline execution:
+    Figure 14 (b) **without** pipeline execution:
     ```bash
     bash examples/benchmark_fig13/run_7B_nopipeline.sh 
     ```
 
-    Figure 13 (b) **with** pipeline execution:
+    Figure 14 (b) **with** pipeline execution:
     ```bash
     bash examples/benchmark_fig13/run_7B_pipeline.sh
     ```
@@ -120,24 +120,23 @@ You can also use tensorboard if you prefer to do so.
     ```bash
     python plot/plt_layerwise_pipeline.py
     ```
-    You may find the visualized result as illustrated in figure 14(b) in `./plot/img/layerwise_pipeline_7B.png`.
+    You may find the visualized result as illustrated in Figure 14(b) in `./plot/img/layerwise_pipeline_7B.png`.
     <div><img src="./plot/img/layerwise_pipeline_7B.png" width="400"/></div>
     
 
-    Figure 13 (c) **without** adaptive timeout:
+    Figure 14 (c) **without** adaptive timeout:
     ```bash
     bash examples/benchmark_fig13/run_7B_adpt_notimeout.sh
     ```
 
-    Figure 13 (c) **with** adaptive timeout:
+    Figure 14 (c) **with** adaptive timeout:
     ```bash
     bash examples/benchmark_fig13/run_7B_adpt_timeout.sh   
     ```
-    After finish execution, you may run the following:
-    ```bash
-    python plot/plt_adaptive_timeout.py
-    ```
-    You may find the visualized result as illustrated in figure 14(b) in `./plot/img/code_adaptive_time_limit.png`.
+    If you collect metrics with W&B or tensorboard, you may search for the `time/step_generate` metric to get the paper's result.
+
+    <div><img src="./plot/img/code_adaptive_time_limit.png" width="400"/></div>
+
 
 - Stream Trainer (Table 3).
     ```bash

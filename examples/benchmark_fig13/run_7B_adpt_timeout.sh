@@ -13,4 +13,4 @@ ray stop --force
 
 python3 -u examples/start_rlvr_pipeline_async.py \
     --config_path "$CONFIG_PATH" \
-    --config_name rlvr_config_code_time_multiasync_adaptive_KodCode 
+    --config_name rlvr_config_qwen2-7B_code_adaptive_timeout

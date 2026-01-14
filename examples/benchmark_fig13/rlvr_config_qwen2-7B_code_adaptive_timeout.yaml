@@ -2,45 +2,42 @@ hydra:
   run:
     dir: .
   output_subdir: null
-exp_name: code_time_test_multiasync_no_adaptive_KodCode
+exp_name: code_adaptive_timeout_qwen2-7B
 seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
-report_length_and_rewards: false
+report_length_and_rewards: true
 profiler_output_dir: ./output/profiler
 system_envs:
   USE_MODELSCOPE: '0'
   LAYER_BY_LAYER: '0'
   LAYER_BY_LAYER_CACHE_RATIO: '0'
-  RAY_get_check_signal_interval_milliseconds: '1'
+  ADAPTIVE_TIMEOUT: '1'
   USE_TIMER: '1'
+  SKIP_OLD_LOG_PROBS: 'True'
+  NVTE_TORCH_COMPILE: '0'
+  TORCH_CUDA_ARCH_LIST: '9.0+PTX'
 checkpoint_config:
   type: file_system
   output_dir: ./${exp_name}
-
-# track_with: wandb
-# tracker_kwargs:
-#   api_key: your-wandb-api-key
-#   project: your-project-name
-#   name: code_time_test_multiasync_no_adaptive_KodCode
-#   notes: code_time_test_multiasync_no_adaptive_KodCode
-#   tags:
-#     - RollPacker
+multi_infer_tp: false
+autoscaling: false
+infer_scaling_down_progress_ratio: -1
+scaling_down_train_batch_size: -1
 
 num_gpus_per_node: 8
 num_rollout_max: 8
 num_judge_min: 0
 num_nodes: 1
-max_steps: 25
+max_steps: 21
 save_steps: 100
 logging_steps: 1
-eval_steps: 100
+eval_steps: 10
 resume_from_checkpoint: false
-multi_infer_tp: false
 global_template: longCOT_qwen2.5
 rollout_batch_size: 44
 prompt_length: 2048
-response_length: 4096
+response_length: 8192
 num_return_sequences_in_group: 8
 ppo_epochs: 1
 adv_estimator: reinforce
@@ -60,19 +57,37 @@ difficulty_loss_weight: false
 length_loss_weight: false
 add_token_level_kl: false
 whiten_advantages: true
-max_running_requests: 16384
+max_running_requests: 2048
 dynamic_sampling: false
 max_num_return_sequences: 10
-max_prompts: 128
-max_prompts_ratio: 1.0
+max_prompts: 2048
+max_prompts_ratio: 1.25
 is_num_return_sequences_expand: true
 pretrain: Qwen/Qwen2.5-7B
 reward_pretrain: Qwen/Qwen2.5-7B
-generate_opt_level: 2
-autoscaling: false
-infer_scaling_down_progress_ratio: -1
-scaling_down_train_batch_size: -1
 
+
+track_with: wandb
+tracker_kwargs:
+  api_key: your-wandb-api-key
+  project: your-project-name
+  name: rlvr_config_qwen2-7B_code_adaptive_timeout
+  notes: rlvr_config_qwen2-7B_code_adaptive_timeout
+  tags:
+    - RollPacker
+
+# validation:
+#   data_args:
+#     template: qwen2_5
+#     file_name:
+#       - /checkpoint/binary/dataset/livecodebench_v5_deal.jsonl
+#   generating_args:
+#     max_new_tokens: ${response_length}
+#     top_p: 0.6
+#     top_k: 50
+#     num_beams: 1
+#     temperature: 0.6
+#     num_return_sequences: 1
 
 actor_train:
   model_args:
@@ -85,7 +100,7 @@ actor_train:
     weight_decay: 0
     per_device_train_batch_size: 4
     gradient_accumulation_steps: 22
-    warmup_steps: 20
+    warmup_steps: 1
     num_train_epochs: 50
   data_args:
     template: ${global_template}
@@ -104,6 +119,7 @@ actor_train:
       pipeline_model_parallel_size: 1
       expert_model_parallel_size: 1
       context_parallel_size: 1
+      overlap_grad_reduce: false
       use_distributed_optimizer: true
       recompute_granularity: full
       variable_seq_lengths: true
@@ -130,7 +146,7 @@ actor_infer:
     strategy_name: vllm
     strategy_config:
       disable_log_stats: false
-      gpu_memory_utilization: 0.9
+      gpu_memory_utilization: 0.7
       block_size: 16
       max_model_len: 36000
       enforce_eager: false
