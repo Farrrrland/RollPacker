@@ -55,11 +55,11 @@ bash install.sh
 ```
 
 ### Option #2: Build your own environment based on ROLL.
-`RollPacker` is build on [ROLL](https://github.com/alibaba/ROLL). So you can follow ROLL's [set up instructions](https://github.com/alibaba/ROLL?tab=readme-ov-file#-get-started) to build your own environment for the **RLVR Pipeline**.
+`RollPacker` is built on [ROLL](https://github.com/alibaba/ROLL). So you can follow ROLL's [set up instructions](https://github.com/alibaba/ROLL?tab=readme-ov-file#-get-started) to build your own environment for the **RLVR Pipeline**.
 
 
-## Recommanded Configurations
-To visualize full metrics, we recommand you to use your [Weights&Biases](https://wandb.ai/) account (which is free to register) and add your configurations in each `yaml` as following:
+## Recommended Configurations
+To visualize full metrics, we recommend you to use your [Weights&Biases](https://wandb.ai/) account (which is free to register) and add your configurations in each `yaml` as following:
 
 ```yaml
 track_with: wandb
@@ -104,14 +104,14 @@ You can also use tensorboard if you prefer to do so.
     You may find the visualized result as illustrated in figure 11 in `./plot/img/prompt_suqeezer_diff_config.png`.
     ![](./plot/img/prompt_suqeezer_diff_config.png)
 
-- Micro-benchmarks of Reward Scheduler (Figure 14(b-c)).
+- Micro-benchmarks of Reward Scheduler (Figure 13(b-c)).
 
-    Figure 14 (b) **without** pipeline execution:
+    Figure 13 (b) **without** pipeline execution:
     ```bash
     bash examples/benchmark_fig13/run_7B_nopipeline.sh 
     ```
 
-    Figure 14 (b) **with** pipeline execution:
+    Figure 13 (b) **with** pipeline execution:
     ```bash
     bash examples/benchmark_fig13/run_7B_pipeline.sh
     ```
@@ -120,16 +120,16 @@ You can also use tensorboard if you prefer to do so.
     ```bash
     python plot/plt_layerwise_pipeline.py
     ```
-    You may find the visualized result as illustrated in Figure 14(b) in `./plot/img/layerwise_pipeline_7B.png`.
+    You may find the visualized result as illustrated in Figure 13(b) in `./plot/img/layerwise_pipeline_7B.png`.
     <div><img src="./plot/img/layerwise_pipeline_7B.png" width="400"/></div>
     
 
-    Figure 14 (c) **without** adaptive timeout:
+    Figure 13 (c) **without** adaptive timeout:
     ```bash
     bash examples/benchmark_fig13/run_7B_adpt_notimeout.sh
     ```
 
-    Figure 14 (c) **with** adaptive timeout:
+    Figure 13 (c) **with** adaptive timeout:
     ```bash
     bash examples/benchmark_fig13/run_7B_adpt_timeout.sh   
     ```
@@ -148,5 +148,5 @@ You can also use tensorboard if you prefer to do so.
     You may compare the step time with previous end-to-end metrics without enabling the stream traine.
     Since tail batching is not enabled in this run, you should compare the average step time with the **Long Rounds** (e.g., global_step=4) in the end-to-end metric.
     ![](./files/stream_compare.png)
-    Note that you can skip the overhead of the first step since it incurres plently initialization overhead with will be armortized with over 100 steps of the total training pipeline.
+    Note that you can skip the overhead of the first step since it incurres plently initialization overhead with will be amortized with over 100 steps of the total training pipeline.
 
