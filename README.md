@@ -84,6 +84,7 @@ tracker_kwargs:
 You can also use tensorboard if you prefer to do so.
 
 ## Run Experiments
+**Please run all the jobs in a `tmux` session to prevent the job from being killed.**
 - End-to-end Evaluation (Figure 8(a)-optional, 9(a), 10).
     ```bash
     bash examples/e2e_performance/run_pipe.sh
