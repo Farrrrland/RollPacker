@@ -18,7 +18,7 @@ We provide you with scripts and configurations to reproduce key results in our p
 - Micro-benchmarks in Figure 13(b with Qwen2.5-7B), Figure 13(c) and Table 3.
 
 *Note 1*: The evaluation results shown in the paper were conducted on NVIDIA H800 clusters with 16-128 GPUs.
-Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight A800/A100 GPUs* to train a **Qwen2.5-7B** model with 4-8K response length. As for a smaller scale, the absolute performance will not be an exact match, but they provide approximately the same trends.
+Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight A100-40G GPUs* to train a **Qwen2.5-7B** model with 4-8K response length. As for a smaller scale, the absolute performance will not be an exact match, but they provide approximately the same trends.
 
 *Note 2*: As running instances continuously is expensive, we will start them on demand. If you would like to use these instances, please email us (yzhaoep@cse.ust.hk) or reply on the HotCRP  discussion thread, and we will start them upon your request and give you corresponding access. Due to the timezone difference, requests between **11:00-23:00 (UTC+8)** will typically be answered immediately; requests outside this window will be handled **as soon as possible the next day**. Thank you for your understanding.
 
