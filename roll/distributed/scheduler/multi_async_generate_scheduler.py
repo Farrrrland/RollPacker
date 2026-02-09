@@ -1052,17 +1052,18 @@ class MultiAsyncDynamicSamplingScheduler:
                     self.response_filter_count += 1
 
             with self.lock:
-                self.timer.update_timestamp(request_id, origin_prompt_id[0], "invoke_reward_compute", rewards_start)
-                self.timer.update_timestamp(request_id, origin_prompt_id[0], "get_reward", rewards_end)
-                # tensor不能被json序列化，先转成python标量
-                self.timer.update_kv(request_id, "start_compute_reward", rewards.batch["start_compute_reward_list"][0].item() if hasattr(rewards.batch["start_compute_reward_list"][0], "item") else rewards.batch["start_compute_reward_list"][0])
-                self.timer.update_kv(request_id, "end_compute_reward", rewards.batch["end_compute_reward_list"][0].item() if hasattr(rewards.batch["end_compute_reward_list"][0], "item") else rewards.batch["end_compute_reward_list"][0])
-                self.timer.update_kv(request_id, "reward_score", rewards.batch["reward_score_list"][0].item() if hasattr(rewards.batch["reward_score_list"][0], "item") else rewards.batch["reward_score_list"][0])
-                self.timer.update_kv(request_id, "test_cases_length", rewards.batch["test_cases_list"][0].item() if hasattr(rewards.batch["test_cases_list"][0], "item") else rewards.batch["test_cases_list"][0])
-                self.timer.update_kv(request_id, "rollout_end_time", rollout_end_time)
-                self.timer.update_kv(request_id, "worker_name", rewards.meta_info["worker_name"])
-                # self.timer.update_kv(request_id, "start_time_inference", rewards.batch["start_time_inference_list"][0].item() if hasattr(rewards.batch["start_time_inference_list"][0], "item") else rewards.batch["start_time_inference_list"][0])
-                # self.timer.update_kv(request_id, "end_time_inference", rewards.batch["end_time_inference_list"][0].item() if hasattr(rewards.batch["end_time_inference_list"][0], "item") else rewards.batch["end_time_inference_list"][0])
+                if domain != 'math_rule':
+                    self.timer.update_timestamp(request_id, origin_prompt_id[0], "invoke_reward_compute", rewards_start)
+                    self.timer.update_timestamp(request_id, origin_prompt_id[0], "get_reward", rewards_end)
+                    # tensor不能被json序列化，先转成python标量
+                    self.timer.update_kv(request_id, "start_compute_reward", rewards.batch["start_compute_reward_list"][0].item() if hasattr(rewards.batch["start_compute_reward_list"][0], "item") else rewards.batch["start_compute_reward_list"][0])
+                    self.timer.update_kv(request_id, "end_compute_reward", rewards.batch["end_compute_reward_list"][0].item() if hasattr(rewards.batch["end_compute_reward_list"][0], "item") else rewards.batch["end_compute_reward_list"][0])
+                    self.timer.update_kv(request_id, "reward_score", rewards.batch["reward_score_list"][0].item() if hasattr(rewards.batch["reward_score_list"][0], "item") else rewards.batch["reward_score_list"][0])
+                    self.timer.update_kv(request_id, "test_cases_length", rewards.batch["test_cases_list"][0].item() if hasattr(rewards.batch["test_cases_list"][0], "item") else rewards.batch["test_cases_list"][0])
+                    self.timer.update_kv(request_id, "rollout_end_time", rollout_end_time)
+                    self.timer.update_kv(request_id, "worker_name", rewards.meta_info["worker_name"])
+                    # self.timer.update_kv(request_id, "start_time_inference", rewards.batch["start_time_inference_list"][0].item() if hasattr(rewards.batch["start_time_inference_list"][0], "item") else rewards.batch["start_time_inference_list"][0])
+                    # self.timer.update_kv(request_id, "end_time_inference", rewards.batch["end_time_inference_list"][0].item() if hasattr(rewards.batch["end_time_inference_list"][0], "item") else rewards.batch["end_time_inference_list"][0])
 
                 if reward_rank is not None:
                     self.reward_worker_loads[reward_rank] -= 1

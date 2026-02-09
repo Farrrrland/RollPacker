@@ -20,7 +20,16 @@ We provide you with scripts and configurations to reproduce key results in our p
 *Note 1*: The evaluation results shown in the paper were conducted on NVIDIA H800 clusters with 16-128 GPUs.
 Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight A100-40G GPUs* to train a **Qwen2.5-7B** model with 4-8K response length. As for a smaller scale, the absolute performance will not be an exact match, but they provide approximately the same trends.
 
-*Note 2*: As running instances continuously is expensive, we will start them on demand. If you would like to use these instances, please email us (yzhaoep@cse.ust.hk) or reply on the HotCRP  discussion thread, and we will start them upon your request and give you corresponding access. Due to the timezone difference, requests between **11:00-23:00 (UTC+8)** will typically be answered immediately; requests outside this window will be handled **as soon as possible the next day**. Thank you for your understanding.
+*Note 2*: **On-Demand Access to GPU Resources (8x NVIDIA A100)**
+Due to the significant operational costs of high-end GPU resources, we provide one 8x A100 (40GB) instance on an on-demand basis. To access the environment for evaluation, please contact us via email (yzhaoep@cse.ust.hk) or leave a comment in the HotCRP discussion thread.
+Please note the following policies regarding resource allocation:
+
+- **FCFS Basis**: Resources are provided on a First-Come, First-Served (FCFS) basis. If the node is currently occupied by another reviewer, your request will be placed in a queue to wait until the resource is available.
+- **Environment & Duration**: Each instance comes pre-configured with **all necessary dependencies**. You may use the conda env `conda activate roll` and skip the environment setup part (run `bash ~/reset_env.sh` to clear the project dir). By default, each session is allocated for **2 hours**. Should you require additional time for extensive experiments, please let us know in your request, and we will do our best to accommodate you.
+- **Response Time**: Our team is based in the UTC+8 time zone. Requests made between *11:00 and 23:00 (UTC+8)* will typically be handled immediately. Requests received outside this window will be processed promptly at the start of the next business day.
+
+We appreciate your understanding and are happy to support your evaluation process.
+
 
 *Note 3*: Experiments that are **NOT** provided:
 - End-to-end training in Figure 8, which allows to train for more than 80 iterations and will cost a large amount of GPU time.
