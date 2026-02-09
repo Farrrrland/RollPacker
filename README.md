@@ -21,7 +21,7 @@ We provide you with scripts and configurations to reproduce key results in our p
 Providing such infrastructure is extremely expensive, so we only provide you with resources of *eight A100-40G GPUs* to train a **Qwen2.5-7B** model with 4-8K response length. As for a smaller scale, the absolute performance will not be an exact match, but they provide approximately the same trends.
 
 *Note 2*: **On-Demand Access to GPU Resources (8x NVIDIA A100)**
-Due to the significant operational costs of high-end GPU resources, we provide one 8x A100 (40GB) instance on an on-demand basis. To access the environment for evaluation, please contact us via email (yzhaoep@cse.ust.hk) or leave a comment in the HotCRP discussion thread.
+Due to the significant operational costs of high-end GPU resources, we provide one AWS p4d.24xlarge (w/ 8x A100-40G GPUs) instance on an on-demand basis. To access the environment for evaluation, please contact us via email (yzhaoep@cse.ust.hk) or leave a comment in the HotCRP discussion thread.
 Please note the following policies regarding resource allocation:
 
 - **FCFS Basis**: Resources are provided on a First-Come, First-Served (FCFS) basis. If the node is currently occupied by another reviewer, your request will be placed in a queue to wait until the resource is available.
