@@ -11,6 +11,8 @@ CONFIG_PATH=$(basename $(dirname $0))
 
 ray stop --force
 
-python3 -u examples/start_rlvr_pipeline_async.py \
+export PYTHONUNBUFFERED=1
+stdbuf -oL -eL python3 -u examples/start_rlvr_pipeline_async.py \
     --config_path "$CONFIG_PATH" \
-    --config_name rlvr_config_flexes_full_7B > e2e.log 2>&1 
+    --config_name rlvr_config_rollpacker_full_7B > e2e.log 2>&1 &
+tail -f e2e.log
