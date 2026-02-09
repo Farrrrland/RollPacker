@@ -26,7 +26,7 @@ Please note the following policies regarding resource allocation:
 
 - **FCFS Basis**: Resources are provided on a First-Come, First-Served (FCFS) basis. If the node is currently occupied by another reviewer, your request will be placed in a queue to wait until the resource is available.
 - **Environment & Duration**: Each instance comes pre-configured with **all necessary dependencies**. You may use the conda env `conda activate roll` and skip the environment setup part (run `bash ~/reset_env.sh` to clear the project dir). By default, each session is allocated for **2 hours**. Should you require additional time for extensive experiments, please let us know in your request, and we will do our best to accommodate you.
-- **Response Time**: Our team is based in the UTC+8 time zone. Requests made between *11:00 and 23:00 (UTC+8)* will typically be handled immediately. Requests received outside this window will be processed promptly at the start of the next business day.
+- **Response Time**: Our team is based in the UTC+8 time zone. Requests made between *11:00 and 21:00 (UTC+8)* will typically be handled immediately. Requests received outside this window will be processed promptly at the start of the next business day.
 
 We appreciate your understanding and are happy to support your evaluation process.
 
