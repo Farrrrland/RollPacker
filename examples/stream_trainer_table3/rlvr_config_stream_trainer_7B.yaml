@@ -130,7 +130,7 @@ actor_infer:
     strategy_name: vllm
     strategy_config:
       disable_log_stats: false
-      gpu_memory_utilization: 0.6
+      gpu_memory_utilization: 0.8
       block_size: 16
       max_model_len: 8192
       enforce_eager: false

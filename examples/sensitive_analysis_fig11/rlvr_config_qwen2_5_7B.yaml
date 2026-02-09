@@ -86,6 +86,7 @@ actor_train:
       use_distributed_optimizer: true
       sequence_parallel: true
       moe_token_dispatcher_type: alltoall
+      recompute_granularity: full
       variable_seq_lengths: true
   device_mapping: list(range(0,8))
   infer_batch_size: 1
