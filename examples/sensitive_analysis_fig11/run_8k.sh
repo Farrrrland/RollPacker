@@ -29,7 +29,7 @@ EXPERIMENTS=(
     [7]="1.5 8"
     [8]="1.25 10"
 )
-
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 rm -rf ./output/profiler/prompt_squeezer_ultra_context8k
 
 for idx in "${!EXPERIMENTS[@]}"; do

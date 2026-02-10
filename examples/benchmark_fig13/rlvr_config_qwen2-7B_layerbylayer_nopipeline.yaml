@@ -6,7 +6,7 @@ exp_name: llmjudge_qwen2-7B_layerbylayer_nopipeline
 seed: 42
 logging_dir: ./output/logs
 output_dir: ./output
-report_length_and_rewards: false
+report_length_and_rewards: true
 profiler_output_dir: ./output/profiler
 system_envs:
   USE_MODELSCOPE: '0'
@@ -84,7 +84,7 @@ actor_train:
   training_args:
     learning_rate: 1.0e-06
     weight_decay: 0
-    per_device_train_batch_size: 4
+    per_device_train_batch_size: 1
     gradient_accumulation_steps: 22
     warmup_steps: 1
     num_train_epochs: 1
@@ -104,7 +104,7 @@ actor_train:
       tensor_model_parallel_size: 2
       pipeline_model_parallel_size: 1
       expert_model_parallel_size: 1
-      context_parallel_size: 1
+      context_parallel_size: 2
       overlap_grad_reduce: false
       use_distributed_optimizer: true
       recompute_granularity: full
@@ -134,7 +134,7 @@ actor_infer:
       disable_log_stats: false
       gpu_memory_utilization: 0.7
       block_size: 16
-      max_model_len: 36000
+      max_model_len: 8192
       enforce_eager: false
       tensor_parallel_size: 1
       max_num_seqs: 2048

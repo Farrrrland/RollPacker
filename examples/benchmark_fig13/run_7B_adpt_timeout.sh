@@ -10,7 +10,8 @@ export TORCH_CUDA_ARCH_LIST="9.0+PTX"
 CONFIG_PATH=$(basename $(dirname $0))
 
 ray stop --force
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-python3 -u examples/start_rlvr_pipeline_async.py \
+python3 -u examples/start_rlvr_infer_only.py \
     --config_path "$CONFIG_PATH" \
     --config_name rlvr_config_qwen2-7B_code_adaptive_timeout

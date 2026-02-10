@@ -7,5 +7,6 @@ ray stop --force
 CONFIG_PATH=$(basename $(dirname $0))
 
 echo $CONFIG_PATH
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-python examples/start_rlvr_pipeline_async.py --config_path $CONFIG_PATH --config_name rlvr_config_qwen2-7B_layerbylayer
+python examples/start_rlvr_infer_only.py --config_path $CONFIG_PATH --config_name rlvr_config_qwen2-7B_layerbylayer

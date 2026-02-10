@@ -19,7 +19,7 @@ def main():
         "--config_name", help="The name of the main configuration file (without extension).", default="sppo_config"
     )
     parser.add_argument(
-        "--total_iterations", type=int, default=20,
+        "--total_iterations", type=int, default=21,
         help="Number of iterations to run for debug inference."
     )
     args = parser.parse_args()

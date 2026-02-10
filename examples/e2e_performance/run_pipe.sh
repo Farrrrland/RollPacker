@@ -10,6 +10,7 @@ export TORCH_CUDA_ARCH_LIST="9.0+PTX"
 CONFIG_PATH=$(basename $(dirname $0))
 
 ray stop --force
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 export PYTHONUNBUFFERED=1
 stdbuf -oL -eL python3 -u examples/start_rlvr_pipeline_async.py \
